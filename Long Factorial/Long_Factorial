@@ -1,0 +1,66 @@
+function processData(input) {
+    //Enter your code here
+    var n = parseInt(input);
+    var multRes = 1;
+    for(var i = 1 ; i <= n ; i++){
+        //multRes *= i;
+        multRes = multiply(multRes,i);
+    }
+    console.log(multRes);
+} 
+
+
+function multiply(intString, multiplier) {
+  var carry = 0,
+      ct = 1,
+      result,
+      digitList = String(intString).split('');
+
+  if (digitList.length === 1) {
+    result = parseInt(intString) * multiplier;
+    return result.toString();
+  }
+  result =  digitList.reverse()
+    .reduce(function(rightStr, digit) {
+      var place, placeStr, carryStr;
+      if (ct === 1) {
+        place = parseInt(rightStr) * multiplier;
+        if (place > 9) {
+          placeStr = place.toString();
+          carryStr = placeStr.substr(0, placeStr.length-1);
+          placeStr = placeStr.substr(carryStr.length, (placeStr.length - carryStr.length));
+          rightStr = parseInt(placeStr);
+          carry = parseInt(carryStr);
+        }
+        ct++;
+      }
+     place = parseInt(digit) * multiplier + carry;
+     if (place > 9) {
+        placeStr = place.toString();
+        carryStr = placeStr.substr(0, placeStr.length-1);
+        placeStr = placeStr.substr(carryStr.length,
+                                   (placeStr.length - carryStr.length));
+        place = parseInt(placeStr);
+        carry = parseInt(carryStr);
+      } else {
+        carry = 0;
+      }
+      return place.toString() + rightStr;
+  });
+  if (carry !== 0) {
+    result = carry.toString() + result;
+  }
+  return result;
+}
+
+ 
+process.stdin.resume();
+process.stdin.setEncoding("ascii");
+_input = "";
+process.stdin.on("data", function (input) {
+    _input += input;
+});
+
+process.stdin.on("end", function () {
+   processData(_input);
+});
